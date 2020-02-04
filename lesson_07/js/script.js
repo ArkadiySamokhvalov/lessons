@@ -1,8 +1,12 @@
 'use strict';
 
-function isNumber(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+function isString (value) {
+    return typeof value === 'string' || value instanceof String;
 }
+
+function isNumber (value) {
+    return typeof value === 'number' && isFinite(value);
+    }
 
 function start() {
     let money;
@@ -21,20 +25,48 @@ let appData = {
     expenses: {},
     addExpenses: [],
     deposit: false,
+    percentDeposit: 0,
+    moneyDeposit : 0,
     mission: 50000,
     period: 3,
     budgetDay: 0,
     budgetMonth: 0,
     expensesMonth: 0,
     asking() {
+        let index,
+            cost;
+        if (confirm('Есть ли у вас дополнительный источник заработка?')) {
+            do {
+                index = prompt('Какой у вас дополнительный заработок?');
+            } while (!isString(index));
+            do {
+                cost = +prompt('Сколько вы на этом зарабатываете?');
+            } while (!isNumber(cost));
+                    
+            appData.income[index] = cost;  
+        }
+
         appData.addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую:')
             .toLowerCase().split(',');
 
-        appData.deposit = confirm('Есть ли у вас депозит в банке?');
-
-        for (let i = 0; i < 2; i++) {
-            appData.expenses[prompt('Введите обязательную статью расходов:')] = +prompt('В сколько это обойдется?');
+        if (confirm('Есть ли у вас депозит в банке?')) {
+            appData.deposit = true;
+            do {
+                appData.percentDeposit = +prompt('Какой процент депозита?');
+            } while (!isNumber(appData.percentDeposit));
+            do {
+                appData.moneyDeposit = +prompt('Какая сумма депозита?');
+            } while (!isNumber(appData.moneyDeposit));
         }
+
+        do {
+            index = prompt('Введите обязательную статью расходов:');
+        } while (!isString(index));
+        do {
+            cost = +prompt('В сколько это обойдется?');
+        } while (!isNumber(cost));
+                
+        appData.expenses[index] = cost;    
     },
     getExpensesMonth() {
         for (let index in appData.expenses) {
@@ -55,14 +87,15 @@ let appData = {
             (appData.budgetDay <= 600) ? 'К сожалению у вас уровень дохода ниже среднего' :
             (appData.budgetDay >= 1200) ? 'У вас высокий уровень дохода' :
             'У вас средний уровень дохода';
+    },
+    calcSavedMoney() {
+        return appData.period * appData.budgetMonth;
     }
 };
 
 appData.asking();
 appData.getExpensesMonth();
 appData.getBudget();
-appData.getTargetMonth();
-appData.getStatusIncome();
 
 console.log('Месячный доход: ', appData.money);
 console.log('Депозит: ', appData.deposit);
@@ -79,7 +112,10 @@ if (appData.getTargetMonth()) {
 } else {
     console.log('Цель не будет достигнута');
 }
-
+console.log('calcSavedMoney: ', appData.calcSavedMoney());
+console.log('appData.percentDeposit: ', appData.percentDeposit);
+console.log('appData.moneyDeposit: ', appData.moneyDeposit);
+console.log('', appData.addExpenses.join(', ').toUpperCase);
 console.log(appData.getStatusIncome());
 
 console.log('Наша программа включает в себя данные:');
