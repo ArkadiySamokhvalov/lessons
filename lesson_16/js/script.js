@@ -1,32 +1,32 @@
 'use strict';
 
-const   buttonStart = document.getElementById('start'),
-        buttons = document.getElementsByTagName('button'),
-        buttonCancel = document.getElementById('cancel'),
-        depositCheck = document.querySelector('#deposit-check'),
-        additionalIncomeItems = document.querySelectorAll('.additional_income-item'),
-        budgetMonthValue = document.getElementsByClassName('budget_month-value')[0],
-        budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
-        expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0],
-        additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0],
-        additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0],
-        incomePeriodValue = document.getElementsByClassName('income_period-value')[0],
-        targetMonthValue = document.getElementsByClassName('target_month-value')[0],
-        salaryAmount = document.querySelector('.salary-amount'),
-        additionalExpensesItem = document.querySelector('.additional_expenses-item'),
-        depositBank = document.querySelector('.deposit-bank'),
-        depositAmount = document.querySelector('.deposit-amount'),
-        depositPercent = document.querySelector('.deposit-percent'),
-        targetAmount = document.querySelector('.target-amount'),
-        periodSelect = document.querySelector('.period-select'),
-        periodAmount = document.querySelector('.period-amount'),
-        resultTypeText = document.querySelectorAll('.result [type="text"]');
+const buttonStart = document.getElementById('start'),
+    buttons = document.getElementsByTagName('button'),
+    buttonCancel = document.getElementById('cancel'),
+    depositCheck = document.querySelector('#deposit-check'),
+    additionalIncomeItems = document.querySelectorAll('.additional_income-item'),
+    budgetMonthValue = document.getElementsByClassName('budget_month-value')[0],
+    budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
+    expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0],
+    additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0],
+    additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0],
+    incomePeriodValue = document.getElementsByClassName('income_period-value')[0],
+    targetMonthValue = document.getElementsByClassName('target_month-value')[0],
+    salaryAmount = document.querySelector('.salary-amount'),
+    additionalExpensesItem = document.querySelector('.additional_expenses-item'),
+    depositBank = document.querySelector('.deposit-bank'),
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent'),
+    targetAmount = document.querySelector('.target-amount'),
+    periodSelect = document.querySelector('.period-select'),
+    periodAmount = document.querySelector('.period-amount'),
+    resultTypeText = document.querySelectorAll('.result [type="text"]');
 
-let     incomeItems = document.querySelectorAll('.income-items'),
-        expensesItems = document.querySelectorAll('.expenses-items'),
-        placeholderNums = document.querySelectorAll('[placeholder="Сумма"]'),
-        placeholderChars = document.querySelectorAll('[placeholder="Наименование"]'),
-        dataTypeText = document.querySelectorAll('.data [type="text"]');
+let incomeItems = document.querySelectorAll('.income-items'),
+    expensesItems = document.querySelectorAll('.expenses-items'),
+    placeholderNums = document.querySelectorAll('[placeholder="Сумма"]'),
+    placeholderChars = document.querySelectorAll('[placeholder="Наименование"]'),
+    dataTypeText = document.querySelectorAll('.data [type="text"]');
 
 
 class AppData {
@@ -43,6 +43,7 @@ class AppData {
         this.deposit = false;
         this.percentDeposit = 0;
         this.moneyDeposit = 0;
+        this.storage = {};
     }
 
     getMoney() {
@@ -54,18 +55,18 @@ class AppData {
             const startStr = item.className.split('-')[0];
             const itemTitle = item.querySelector(`.${startStr}-title`).value;
             const itemAmount = item.querySelector(`.${startStr}-amount`).value;
-
             if (itemTitle !== '' && itemAmount !== '') {
-                this[startStr][itemTitle] = itemAmount;
-            }
-
-            incomeItems.forEach(count);
-            expensesItems.forEach(count);
-
-            for (const key in this.income) {
-                this.incomeMonth += +this.income[key];
+                this[startStr][itemTitle] = +itemAmount;
             }
         };
+
+        incomeItems.forEach(count);
+
+        expensesItems.forEach(count);
+
+        for (const key in this.income) {
+            this.incomeMonth += +this.income[key];
+        }
     }
 
     getAddExpInc() {
@@ -178,16 +179,40 @@ class AppData {
     }
 
     showResults() {
-        budgetMonthValue.value = this.budgetMonth;
-        budgetDayValue.value = Math.round(this.budgetDay);
-        expensesMonthValue.value = this.expensesMonth;
-        additionalExpensesValue.value = this.addExpenses.join(', ');
-        additionalIncomeValue.value = this.addIncome.join(', ');
-        targetMonthValue.value = this.calcTargetMonth();
-        incomePeriodValue.value = this.calcPeriod();
-        periodSelect.addEventListener('input', () => {
+        if (this.getCookie('isLoaded')) {
+            budgetMonthValue.value = this.storage.budgetMonthValue;
+            budgetDayValue.value = this.storage.budgetDayValue;
+            expensesMonthValue.value = this.storage.expensesMonthValue;
+            additionalExpensesValue.value = this.storage.additionalExpensesValue;
+            additionalIncomeValue.value = this.storage.additionalIncomeValue;
+            targetMonthValue.value = this.storage.targetMonthValue;
+            incomePeriodValue.value = this.storage.incomePeriodValue;
+            incomePeriodValue.value = this.storage.incomePeriodValue;
+            periodSelect.addEventListener('input', () => {
+                incomePeriodValue.value = this.storage.incomePeriodValue * periodSelect.value;
+            });
+        } else {
+            budgetMonthValue.value = this.budgetMonth;
+            budgetDayValue.value = Math.round(this.budgetDay);
+            expensesMonthValue.value = this.expensesMonth;
+            additionalExpensesValue.value = this.addExpenses.join(', ');
+            additionalIncomeValue.value = this.addIncome.join(', ');
+            targetMonthValue.value = this.calcTargetMonth();
             incomePeriodValue.value = this.calcPeriod();
-        });
+            periodSelect.addEventListener('input', () => {
+                incomePeriodValue.value = this.calcPeriod();
+                this.storage.incomePeriodValue = incomePeriodValue.value;
+            });
+
+            this.storage.budgetMonthValue = budgetMonthValue.value;
+            this.storage.budgetDayValue = budgetDayValue.value;
+            this.storage.expensesMonthValue = expensesMonthValue.value;
+            this.storage.additionalExpensesValue = additionalExpensesValue.value;
+            this.storage.additionalIncomeValue = additionalIncomeValue.value;
+            this.storage.targetMonthValue = targetMonthValue.value;
+            this.storage.incomePeriodValue = incomePeriodValue.value;
+            this.storage.incomePeriodValue = incomePeriodValue.value;
+        }
     }
 
     reset() {
@@ -213,15 +238,47 @@ class AppData {
         return typeof value === 'number' && isFinite(value);
     }
 
+    getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    deleteCookie(name) {
+        this.setCookie(name, "", {
+            'max-age': -1
+        });
+    }
+
+    loadStorage() {
+        buttonStart.setAttribute('disabled', 'disabled');
+
+        if (this.getCookie('isLoaded')) {
+            this.storage = JSON.parse(localStorage.getItem("storage"));
+            this.showResults();
+
+            dataTypeText.forEach((index) => {
+                index.setAttribute('disabled', 'disabled');
+            });
+            buttonStart.style.display = 'none';
+            buttons[0].setAttribute('disabled', 'disabled');
+            buttons[1].setAttribute('disabled', 'disabled');
+            buttonCancel.style.display = 'inline-block';
+        }
+    }
+
     eventsListeners() {
+        document.addEventListener('load ', this.loadStorage());
+
         salaryAmount.addEventListener('input', () => {
             if (salaryAmount.value !== '' && this.isNumber(+salaryAmount.value)) {
                 buttonStart.removeAttribute('disabled');
-            }
-            else {
+            } else {
                 buttonStart.setAttribute('disabled', 'disabled');
             }
         });
+
         buttonStart.addEventListener('click', () => {
             this.getMoney();
             this.getExpInc();
@@ -230,6 +287,11 @@ class AppData {
             this.getInfoDeposit();
             this.calcBudget();
             this.showResults();
+            console.log(this);
+            //this.setCookie('isLoaded', true);
+            document.cookie = 'isLoaded=true;';
+            localStorage.setItem('storage', JSON.stringify(this.storage));
+
             dataTypeText.forEach((index) => {
                 index.setAttribute('disabled', 'disabled');
             });
@@ -238,7 +300,11 @@ class AppData {
             buttons[1].setAttribute('disabled', 'disabled');
             buttonCancel.style.display = 'inline-block';
         });
+
         buttonCancel.addEventListener('click', () => {
+            localStorage.removeItem('storage');
+            this.deleteCookie('isLoaded');
+
             dataTypeText.forEach((index) => {
                 index.removeAttribute('disabled');
                 index.value = '';
@@ -246,27 +312,35 @@ class AppData {
             resultTypeText.forEach((index) => {
                 index.value = '';
             });
+
             this.reset();
+
             buttons[0].removeAttribute('disabled');
             buttons[1].removeAttribute('disabled');
             buttonStart.style.display = 'inline-block';
             buttonCancel.style.display = 'none';
         });
+
         buttons[0].addEventListener('click', () => {
             this.addBlock('income');
             dataTypeText = document.querySelectorAll('.data [type="text"]');
             placeholderNums = document.querySelectorAll('[placeholder="Сумма"]');
             placeholderChars = document.querySelectorAll('[placeholder="Наименование"]');
+            incomeItems = document.querySelectorAll('.income-items');
         });
+
         buttons[1].addEventListener('click', () => {
             this.addBlock('expenses');
             dataTypeText = document.querySelectorAll('.data [type="text"]');
             placeholderNums = document.querySelectorAll('[placeholder="Сумма"]');
             placeholderChars = document.querySelectorAll('[placeholder="Наименование"]');
+            expensesItems = document.querySelectorAll('.expenses-items');
         });
+
         periodSelect.addEventListener('input', () => {
             periodAmount.textContent = periodSelect.value;
         });
+
         placeholderNums.forEach((placeholderNums) => {
             placeholderNums.addEventListener('keypress', (e) => {
                 if (!e.key.match(/[\d]/)) {
@@ -279,16 +353,16 @@ class AppData {
             //     !regex.test(e.value) ? e.value .= : ;
             // });
         });
+
         placeholderChars.forEach(placeholderNums => placeholderNums.addEventListener('keypress', (e) => {
             if (!e.key.match(/[А-Я,-]/gi)) {
                 e.preventDefault();
             }
         }));
+
         depositCheck.addEventListener('change', this.depositHandler.bind(this));
     }
 }
 
-buttonStart.setAttribute('disabled', 'disabled');
 const appData = new AppData();
 appData.eventsListeners();
-console.log('AppData: ', appData);
