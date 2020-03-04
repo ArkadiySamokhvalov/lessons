@@ -25,12 +25,12 @@ export default function sendForm() {
       requestAnimationFrame(rotateAnimate);
     } else {
       statusMessage.style.transform = 'rotate(0deg)';
-      cancelAnimationFrame(animation);
     }
   };
 
   forms.forEach((item) => {
     item.addEventListener('submit', (event) => {
+      console.log('item: ', item);
       event.preventDefault();
 
       item.appendChild(statusMessage);
@@ -53,6 +53,9 @@ export default function sendForm() {
           console.log(response);
           statusMessage.classList.remove('rotate');
           statusMessage.src = successMessage;
+          item.querySelectorAll('input').forEach((input) => {
+            input.value = '';
+          });
         })
         .catch((error) => {
           statusMessage.classList.remove('rotate');

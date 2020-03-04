@@ -7,9 +7,12 @@ export default function calc(price) {
     totalValue = container.querySelector('#total');
 
   function countSum() {
+    let animation = '';
     let total = 0,
       countValue = 1,
-      dayValue = 1;
+      dayValue = 1,
+      k = 0;
+
     const typeValue = calcType.options[calcType.selectedIndex].value,
       squareValue = +calcSquare.value;
 
@@ -27,15 +30,21 @@ export default function calc(price) {
       total = price * typeValue * squareValue * countValue * dayValue;
     }
 
-    let i = 1;
-    let int = setInterval(() => {
-      if (i <= total) {
-        totalValue.textContent = i;
-      } else {
-        clearInterval(int);
+    animation = requestAnimationFrame(function animateSum() {
+      if (k <= total) {
+        let whole = total / 10,
+            remainder = total % 10;
+
+        if (k === (total - remainder)) {
+          k += remainder;
+        } else {
+          k += whole;
+        }
+
+        totalValue.textContent = k;
+        requestAnimationFrame(animateSum);
       }
-      i++;
-    }, 17);
+    });
   }
 
   container.addEventListener('change', (event) => {
