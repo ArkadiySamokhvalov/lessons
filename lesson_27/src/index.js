@@ -1,3 +1,4 @@
+'use strict';
 import countTimer from './modules/countTimer';
 import toggleMenu from './modules/toggleMenu';
 import togglePopup from './modules/togglePopUp';
@@ -20,10 +21,10 @@ import smoothscroll from 'smoothscroll-polyfill';
 smoothscroll.polyfill();
 
 window.addEventListener('DOMContentLoaded', () => {
-  'use strict';
-  /* Таймер */
   let date = new Date();
-  countTimer((date.getDate()+1) + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' 00:00:00');
+  /* Таймер */
+  countTimer((date.getDate() + 1) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' 00:00:00');
+
   /* Меню */
   toggleMenu();
   /* PopUp */

@@ -30,7 +30,6 @@ export default function sendForm() {
 
   forms.forEach((item) => {
     item.addEventListener('submit', (event) => {
-      console.log('item: ', item);
       event.preventDefault();
 
       item.appendChild(statusMessage);
@@ -50,17 +49,25 @@ export default function sendForm() {
           if (response.status !== 200) {
             throw new Error('status network is not 200');
           }
-          console.log(response);
           statusMessage.classList.remove('rotate');
           statusMessage.src = successMessage;
-          item.querySelectorAll('input').forEach((input) => {
-            input.value = '';
-          });
+          setTimeout(() => {
+            item.querySelectorAll('input').forEach((input) => {
+              input.value = '';
+            });
+            item.removeChild(statusMessage);
+          }, 2000);
         })
         .catch((error) => {
           statusMessage.classList.remove('rotate');
           statusMessage.src = errorMessage;
           console.log(error);
+          setTimeout(() => {
+            item.querySelectorAll('input').forEach((input) => {
+              input.value = '';
+            });
+            item.removeChild(statusMessage);
+          }, 2000);
         });
     });
   });

@@ -35,6 +35,6 @@ export default function countTimer(deadLine) {
       timerSeconds.textContent = '00';
     }
   }
-
+  updateClock();
   interval = setInterval(updateClock, 1000);
 }
