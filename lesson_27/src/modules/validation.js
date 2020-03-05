@@ -1,3 +1,5 @@
+'use strict';
+
 function validationCalc() {
   const inputs = document.querySelectorAll('#calc input[type="number"]');
 
@@ -9,7 +11,6 @@ function validationCalc() {
     });
   });
 }
-
 
 function validationForms() {
   const formPhone = document.querySelectorAll('.form-phone'),

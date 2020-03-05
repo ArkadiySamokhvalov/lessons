@@ -1,3 +1,5 @@
+'use strict';
+
 export default function countTimer(deadLine) {
   const timerHours = document.querySelector('#timer-hours'),
     timerMinutes = document.querySelector('#timer-minutes'),

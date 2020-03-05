@@ -1,3 +1,5 @@
+'use strict';
+
 export default function changePhoto() {
   const container = document.getElementById('command');
 

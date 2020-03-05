@@ -1,3 +1,5 @@
+'use strict';
+
 export default function sendForm() {
   const errorMessage = '../images/icons/cross.png',
     loadMessage = '../images/icons/refresh.png',

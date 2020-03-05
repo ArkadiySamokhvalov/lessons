@@ -1,3 +1,5 @@
+'use strict';
+
 export default function calc(price) {
   const container = document.querySelector('.calc-block'),
     calcType = container.querySelector('.calc-type'),
@@ -32,7 +34,7 @@ export default function calc(price) {
 
     animation = requestAnimationFrame(function animateSum() {
       if (k <= total) {
-        let whole = total / 10,
+        let whole = Math.floor(total / 10),
             remainder = total % 10;
 
         if (k === (total - remainder)) {

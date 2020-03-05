@@ -1,3 +1,5 @@
+'use strict';
+
 export default function slider() {
   const container = document.querySelector('.portfolio-content'),
     slides = container.querySelectorAll('.portfolio-item'),

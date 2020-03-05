@@ -1,3 +1,5 @@
+'use strict';
+
 export default function toggleTabs() {
   const tabHeader = document.querySelector('.service-header'),
     tabs = tabHeader.querySelectorAll('.service-header-tab'),

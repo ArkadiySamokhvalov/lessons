@@ -1,3 +1,5 @@
+'use strict';
+
 export default function togglePopup() {
   const popup = document.querySelector('.popup'),
     btnsPopup = document.querySelectorAll('.popup-btn'),
