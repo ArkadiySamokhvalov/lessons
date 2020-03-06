@@ -6,6 +6,7 @@ export default function countTimer(deadLine) {
     timerSeconds = document.querySelector('#timer-seconds');
   let interval = '';
 
+  // получение разницы между датами
   function getTimeRemaining() {
     let dateStop = new Date(deadLine).getTime(),
       dateNow = new Date().getTime(),
@@ -23,6 +24,7 @@ export default function countTimer(deadLine) {
     };
   }
 
+  // обновление полей таймера
   function updateClock() {
     let timer = getTimeRemaining();
 

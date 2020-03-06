@@ -5,8 +5,8 @@ export default function togglePopup() {
     btnsPopup = document.querySelectorAll('.popup-btn'),
     popupContent = document.querySelector('.popup-content');
 
+  // анимация появления сверху
   let count = -60;
-
   function animate() {
     count += 2;
     popupContent.style.top = count + '%';
@@ -15,6 +15,7 @@ export default function togglePopup() {
     }
   }
 
+  // убирает popUp по клику на крестик или пространство вне модального окна
   popup.addEventListener('click', (event) => {
     let target = event.target;
 

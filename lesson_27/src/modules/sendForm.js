@@ -18,8 +18,8 @@ export default function sendForm() {
     });
   };
 
-  let i = 0,
-    animation = '';
+  // анимация вращения при загрузке
+  let i = 0;
   const rotateAnimate = () => {
     if (statusMessage.classList.contains('rotate')) {
       i += 1;
@@ -37,7 +37,7 @@ export default function sendForm() {
       item.appendChild(statusMessage);
       statusMessage.src = loadMessage;
       statusMessage.classList.add('rotate');
-      animation = requestAnimationFrame(rotateAnimate);
+      requestAnimationFrame(rotateAnimate);
 
       const formData = new FormData(item);
       let body = {};
@@ -51,8 +51,11 @@ export default function sendForm() {
           if (response.status !== 200) {
             throw new Error('status network is not 200');
           }
+
           statusMessage.classList.remove('rotate');
           statusMessage.src = successMessage;
+
+          // очистка полей формы и удаление statusMessage со страницы через 2 секунды
           setTimeout(() => {
             item.querySelectorAll('input').forEach((input) => {
               input.value = '';
@@ -63,7 +66,9 @@ export default function sendForm() {
         .catch((error) => {
           statusMessage.classList.remove('rotate');
           statusMessage.src = errorMessage;
+
           console.log(error);
+
           setTimeout(() => {
             item.querySelectorAll('input').forEach((input) => {
               input.value = '';

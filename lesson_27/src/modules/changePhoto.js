@@ -3,6 +3,7 @@
 export default function changePhoto() {
   const container = document.getElementById('command');
 
+  // обмен src на dataset.src
   function exchangeSrcData(item) {
     let temp;
     temp = item.src;

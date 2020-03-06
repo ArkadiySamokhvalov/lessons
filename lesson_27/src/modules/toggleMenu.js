@@ -10,6 +10,7 @@ export default function toggleMenu() {
       menu.classList.remove('active-menu');
     }
 
+    // плавная прокрутка к элементу
     if (event.target.matches('menu > ul > li > a, main > a > img')) {
       const blockID = event.target.closest('a').getAttribute('href').substr(1);
       event.preventDefault();

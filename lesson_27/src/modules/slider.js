@@ -8,6 +8,7 @@ export default function slider() {
   let currentSlide = 0,
     interval;
 
+  // создание точек-преходов на слайды
   function createDots() {
     slides.forEach((item) => {
       let dot = document.createElement('li');
@@ -30,6 +31,7 @@ export default function slider() {
     elem[index].classList.add(className);
   }
 
+  // автоматическая прокрутка слайдов
   function autoPlay() {
     prevSlide(slides, currentSlide, 'portfolio-item-active');
     prevSlide(dots, currentSlide, 'dot-active');

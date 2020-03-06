@@ -8,6 +8,7 @@ export default function calc(price) {
     calcCount = container.querySelector('.calc-count'),
     totalValue = container.querySelector('#total');
 
+  // подсчёт результата
   function countSum() {
     let animation = '';
     let total = 0,
@@ -32,6 +33,7 @@ export default function calc(price) {
       total = price * typeValue * squareValue * countValue * dayValue;
     }
 
+    // анимация цифр в поле результата
     animation = requestAnimationFrame(function animateSum() {
       if (k <= total) {
         let whole = Math.floor(total / 10),
