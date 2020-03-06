@@ -70,9 +70,6 @@ export default function sendForm() {
           console.log(error);
 
           setTimeout(() => {
-            item.querySelectorAll('input').forEach((input) => {
-              input.value = '';
-            });
             item.removeChild(statusMessage);
           }, 2000);
         });

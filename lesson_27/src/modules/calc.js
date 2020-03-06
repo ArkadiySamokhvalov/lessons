@@ -7,10 +7,10 @@ export default function calc(price) {
     calcDay = container.querySelector('.calc-day'),
     calcCount = container.querySelector('.calc-count'),
     totalValue = container.querySelector('#total');
-
+    let animation = '';
   // подсчёт результата
   function countSum() {
-    let animation = '';
+    cancelAnimationFrame(animation);
     let total = 0,
       countValue = 1,
       dayValue = 1,
@@ -30,25 +30,24 @@ export default function calc(price) {
     }
 
     if (typeValue && squareValue) {
-      total = price * typeValue * squareValue * countValue * dayValue;
-    }
-
-    // анимация цифр в поле результата
-    animation = requestAnimationFrame(function animateSum() {
-      if (k <= total) {
-        let whole = Math.floor(total / 10),
+      total = Math.floor(price * typeValue * squareValue * countValue * dayValue);
+      // анимация цифр в поле результата
+      animation = requestAnimationFrame(function animateSum() {
+        if (k !== total) {
+          let whole = Math.floor(total / 10),
             remainder = total % 10;
 
-        if (k === (total - remainder)) {
-          k += remainder;
-        } else {
-          k += whole;
-        }
+          if (k === (total - remainder)) {
+            k += remainder;
+          } else {
+            k += whole;
+          }
 
-        totalValue.textContent = k;
-        requestAnimationFrame(animateSum);
-      }
-    });
+          totalValue.textContent = k;
+          requestAnimationFrame(animateSum);
+        }
+      });
+    }
   }
 
   container.addEventListener('change', (event) => {
